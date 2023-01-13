@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-xs-12">
+      <form  >
+        <h3>Edit Product</h3>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label for="name">Name</label>
+              <input type="text"
+                     id="name"
+
+                      value={{data.name}}
+                     class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="name">Type</label>
+                    <select type="select"
+                       id="name"
+
+                       class="form-control"
+                       >
+                       <option *ngFor="let type of typeSelect" value="{{type}}">{{type}}</option>
+                    </select>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="name">Manufacturer</label>
+                <select type="select"
+                id="name"
+
+                class="form-control"
+                >
+                <option *ngFor="let manu of manuSelect" >{{manu}}</option>
+             </select>
+              </div>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                class="form-control"
+
+                value={{data.description}}
+                rows="6"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+              <div class="form-group">
+                <label for="name">Year</label>
+                <input type="text"
+                       id="name"
+
+                       class="form-control"
+                       value={{data.year}}>
+                       
+              </div>
+            </div>
+          </div>
+
+        <div class="row">
+          <div class="col-xs-3">
+            <div class="form-group">
+              <label for="price">Price</label>
+              <span style="float: right"> VNĐ</span>
+              <input type="text"
+                     id="price"
+
+                     class="form-control"
+                     value={{data.price}}>
+                     
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12" >
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]=""
+              style="margin-right: 4px">Edit
+            </button>
+            
+            <button type="button"
+                    class="btn btn-danger"
+                    mat-button mat-dialog-close
+                    >
+                    Cancel
+            </button>
+
+            <button type="button"
+                    class="btn btn-dark"
+                    style="float: right;"
+
+                    mat-button mat-dialog-close
+                    >
+                    Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
