@@ -1,16 +1,20 @@
-<div class="row">
+<div class="row contain">
     <div class="col-xs-12">
-      <form  >
-        <h3>Edit Product</h3>
+      <form >
+        <h2>Edit Product</h2>
+
         <div class="row">
           <div class="col-xs-12">
             <div class="form-group">
-              <label for="name">Name</label>
+              <label for="name">Name:</label>
               <input type="text"
                      id="name"
-
-                      value={{data.name}}
-                     class="form-control">
+                     name="name"
+                     class="form-control"
+                     style=" display: flex;  margin-bottom: 10px;"
+                     value={{data.productName}}
+                     #NameProduct
+                     >
             </div>
           </div>
         </div>
@@ -21,8 +25,9 @@
                 <label for="name">Type</label>
                     <select type="select"
                        id="name"
-
                        class="form-control"
+                       style=" display: flex;  margin-bottom: 10px;"
+                       #TypeProduct
                        >
                        <option *ngFor="let type of typeSelect" value="{{type}}">{{type}}</option>
                     </select>
@@ -36,8 +41,9 @@
                 <label for="name">Manufacturer</label>
                 <select type="select"
                 id="name"
-
                 class="form-control"
+                style=" display: flex;  margin-bottom: 10px;"
+                #ManufacturerProduct
                 >
                 <option *ngFor="let manu of manuSelect" >{{manu}}</option>
              </select>
@@ -52,8 +58,9 @@
               <textarea
                 id="description"
                 class="form-control"
-
+                style=" display: flex;  margin-bottom: 10px;"
                 value={{data.description}}
+                #DescriptionProduct
                 rows="6"></textarea>
             </div>
           </div>
@@ -65,9 +72,11 @@
                 <label for="name">Year</label>
                 <input type="text"
                        id="name"
-
                        class="form-control"
-                       value={{data.year}}>
+                       style=" display: flex;  margin-bottom: 10px;"
+                       value={{data.year}}
+                       #YearProduct
+                       >
                        
               </div>
             </div>
@@ -80,24 +89,30 @@
               <span style="float: right"> VNĐ</span>
               <input type="text"
                      id="price"
-
                      class="form-control"
-                     value={{data.price}}>
+                     style=" display: flex;  margin-bottom: 10px;"
+                     value={{data.price}}
+                     #PriceProduct
+                     >
                      
             </div>
           </div>
         </div>
-        <div class="row">
+        <div class="row button-css">
           <div class="col-xs-12" >
             <button
               type="submit"
               class="btn btn-success"
               [disabled]=""
-              style="margin-right: 4px">Edit
+              style=" width: 100px; margin-right: 15px;"
+              (click)="editProduct()"
+              mat-button mat-dialog-close
+              >Edit
             </button>
             
             <button type="button"
                     class="btn btn-danger"
+
                     mat-button mat-dialog-close
                     >
                     Cancel
@@ -106,7 +121,7 @@
             <button type="button"
                     class="btn btn-dark"
                     style="float: right;"
-
+                    (click)="deleteProduct()"
                     mat-button mat-dialog-close
                     >
                     Delete

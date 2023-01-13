@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { User } from '../model/user.model';
 
-const AUTH_API = 'http://localhost:9000/user/login/';
+const AUTH_API = 'http://localhost:8081/api/auth/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
@@ -15,18 +15,22 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  getAuthorizationToken() {
+  getAuthorizationToken(): string {
     const token = window.localStorage.getItem('token');
-    if (token) {
+    if (token!=null) {
       return token;
     }
     return '';
   }
-  
-  login(user: User): Observable<any>{
+
+  signIn(user: User): Observable<any>{
     // console.log(AUTH_API + "signin");
-    return this.http.post(AUTH_API,user,{
+    return this.http.post(AUTH_API + 'signin',user,{
       responseType: 'text'
     })
+  }
+
+  signOut(){
+
   }
 }

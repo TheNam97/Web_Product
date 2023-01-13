@@ -1,9 +1,12 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 //
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
+import { Products } from 'src/app/model/Products.model';
+import { ProductsService } from 'src/app/Services/products.service';
+import { ProductAddComponent } from '../product-add/product-add.component';
 import { ProductEditComponent } from '../product-edit/product-edit.component';
 
 @Component({
@@ -12,12 +15,75 @@ import { ProductEditComponent } from '../product-edit/product-edit.component';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent {
+  
+  @ViewChild('ten') nameProductInput:ElementRef | undefined;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private _dialog: MatDialog ){}
-
+  public nameProduct ='test'
+  public arrayProduct: Products[]=[]
+  public pageSize = [5];
+  ///////////
+  constructor(private _dialog: MatDialog, private productService: ProductsService ){}
   /////////////
-  openDialogEdit(row: PeriodicElement){
-    console.log('Row clicked', row);
+
+  ngOnInit(){
+      this.getAllProduct()
+  }
+
+  public reloadList(){
+    console.log('reload');
+    window.location.reload();
+  }
+
+  public getAllProduct(){
+    // console.log(this.pageSize);
+    // this.dataSource.paginator = this.paginator;
+
+    this.productService.getAllProduct().subscribe(data =>
+    { 
+      this.arrayProduct=data
+      this.dataSource = new MatTableDataSource<Products>(this.arrayProduct);
+      this.ngAfterViewInit()
+      console.log(this.arrayProduct);
+    },
+    error => alert("Không có sản phẩm"));
+  }
+  
+  public getProductByName(){
+    if(this.nameProductInput?.nativeElement.value == '')
+    {
+      this.getAllProduct()
+    }
+    else {
+      this.productService.getProductByName(this.nameProductInput?.nativeElement.value).subscribe(data =>
+      { 
+        this.arrayProduct=data
+        this.dataSource = new MatTableDataSource<Products>(this.arrayProduct);
+      },
+      error => alert("Không tìm thấy sản phẩm  theo Tên"));
+  }
+  }
+
+  openDialogAdd(){
+    // const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = false;
+    // dialogConfig.autoFocus=true
+    // dialogConfig.width = "50%"
+    // const dialogRef = this.dialog.open(ProductAddComponent,dialogConfig)
+
+    const dialog = this._dialog.open(ProductAddComponent, {
+      width: '40%',
+      disableClose: false,
+      autoFocus:true,
+    });
+
+    dialog.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.getAllProduct()
+    });
+  }
+  openDialogEdit(row: Products){
+    //console.log('Row clicked', row);
     const dialog = this._dialog.open(ProductEditComponent, {
       width: '40%',
       disableClose: false,
@@ -26,59 +92,56 @@ export class ProductListComponent {
     });
 
     dialog.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      console.log('The dialog was eeeee');
+      this.getAllProduct()
+      //window.location.reload();
     });
   }
-  // public dataToEdit(a: any){
-  //    this.toEdit?.getData(a)
-  // }
-////////////////
-  displayedColumns: string[] = ['id','name','type','manufacturer','description','year','price'];
 
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
-
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
-
-
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
-  clickedRows = new Set<PeriodicElement>();
-
-
-}
-export interface PeriodicElement {
-  id: number;
-  name: string;
-  type: string;
-  manufacturer: string;
-  description: string;
-  year: number;
-  price: number;
+    ////////////////
+    displayedColumns: string[] = ['id','productName','type','manufacturer','description','year','price'];
+    dataSource = new MatTableDataSource<Products>(this.arrayProduct);
+    
+    
+    ngAfterViewInit() {
+      this.dataSource.paginator = this.paginator;
+    }
+    
+    clickedRows = new Set<Products>();
+    //////
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {id: 1, name: 'Hydrogen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 2, name: 'Helium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 3, name: 'Lithium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 4, name: 'Beryllium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 5, name: 'Boron',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 6, name: 'Carbon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 7, name: 'Nitrogen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 8, name: 'Oxygen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 9, name: 'Fluorine',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 10, name: 'Neon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 11, name: 'Sodium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 12, name: 'Magnesium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 13, name: 'Aluminum',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 14, name: 'Silicon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 15, name: 'Phosphorus',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 16, name: 'Sulfur',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 17, name: 'Chlorine',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 18, name: 'Argon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 19, name: 'Potassium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
-  {id: 20, name: 'Calcium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200}
-];
+
+
+// export interface PeriodicElement {
+//   id: Number
+//   productName: string;
+//   type: string;
+//   manufacturer: string;
+//   description: string;
+//   year: number;
+//   price: number;
+// }
+
+// const ELEMENT_DATA: PeriodicElement[] = [
+//   {id: 1, productName: 'Hydrogen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 2, productName: 'Helium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 3, productName: 'Lithium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 4, productName: 'Beryllium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 5, productName: 'Boron',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 6, productName: 'Carbon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 7, productName: 'Nitrogen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 8, productName: 'Oxygen',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 9, productName: 'Fluorine',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 10, productName: 'Neon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 11, productName: 'Sodium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 12, productName: 'Magnesium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 13, productName: 'Aluminum',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 14, productName: 'Silicon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 15, productName: 'Phosphorus',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 16, productName: 'Sulfur',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 17, productName: 'Chlorine',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 18, productName: 'Argon',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 19, productName: 'Potassium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200},
+//   {id: 20, productName: 'Calcium',type: 'aaaa', manufacturer:'apple',description:'haha',year: 2000,price:200}
+// ];

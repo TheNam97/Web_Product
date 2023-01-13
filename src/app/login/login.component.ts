@@ -15,7 +15,7 @@ import { ProductsService } from '../Services/products.service';
 })
 export class LoginComponent {
   
-  public user : User = new User();
+  user : User = new User();
 
   constructor(
     private router : Router,
@@ -25,32 +25,31 @@ export class LoginComponent {
     // private tokenService : TokenService
   ){}
   
-  getFoods() {
-    this.productService.findAll(5,'dfgdfg')
-      .subscribe(data => {
-          console.log(data.listFood);
-        }
-      ,
-    error => alert("Không lấy đc"));
+  // getAllProduct() {
+  //   this.productService.getAllProduct(5,'hay')
+  //     .subscribe(data => {
+  //         console.log(data);
+  //       }
+  //     ,
+  //   error => alert("Không lấy đc dữ liệu"));
+  // }
 
-  }
-
-  public getProductById(){
-    this.productService.getProductById('4fa01c80-c185-436e-8085-91e23b482860').subscribe(data =>
-    {
-      console.log(data);
-    },
-    error => alert("Không lấy đc"));
-  }
+  // public getProductByName(nameProduct: string){
+  //   this.productService.getProductByName(nameProduct).subscribe(data =>
+  //   { 
+  //     //data array   
+  //     console.log(data);
+  //   },
+  //   error => alert("a"));
+  // }
 
   public signin(){
     console.log(this.user);
-    this.authService.login(this.user).subscribe(data =>
+    this.authService.signIn(this.user).subscribe(data =>
       {
         window.localStorage.setItem('token', data);
-        console.log(data)
-        
-        //this.router.navigate(['/home']);
+        console.log(typeof data, data)
+        this.router.navigate(['/header-footer']);
       },
     error => alert("Tên đăng nhập hoặc mật khẩu không đúng")
     )
